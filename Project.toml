@@ -1,0 +1,4 @@
+name = "DSIFTDescriptorForObjectDetection"
+uuid = "7d6041e5-0f57-43ca-ac5d-b3eaebc80d16"
+authors = ["Pierre Averty <pierre.averty2001@gmail.com>"]
+version = "0.1.0"
