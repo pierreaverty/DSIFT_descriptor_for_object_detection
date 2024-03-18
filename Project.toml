@@ -5,4 +5,5 @@ version = "0.1.0"
 
 [deps]
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+ImageFeatures = "92ff4b2b-8094-53d3-b29d-97f740f06cef"
 Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"

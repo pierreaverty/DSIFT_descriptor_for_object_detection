@@ -1,7 +1,8 @@
 module DSIFTDescriptorForObjectDetection
 
 using FileIO, 
-    Images
+    Images,
+    ImageFeatures
 
 """
     loadImgByPatches(image::AbstractMatrix, dim::Tuple{Int, Int}=(16, 16), stride::Tuple{Int, Int}=(8,8))
@@ -17,6 +18,7 @@ Load an image by dividing it into patches of specified dimensions and stride.
 An array of patches extracted from the image.
 
 """
+
 function loadImgByPatches(image::AbstractMatrix, dim::Tuple{Int, Int}=(16, 16), stride::Tuple{Int, Int}=(8,8))
     patches = []
 
@@ -29,6 +31,38 @@ function loadImgByPatches(image::AbstractMatrix, dim::Tuple{Int, Int}=(16, 16), 
     return patches
 end
 
+"""
+    computeSIFTDescriptors(patch::AbstractMatrix)
+
+Compute SIFT descriptors for the given patch.
+
+# Arguments
+- `patch::AbstractMatrix`: The patch for which to compute SIFT descriptors.
+
+# Returns
+- `descriptors`: An empty array to store the computed SIFT descriptors.
+
+"""
+function computeSIFTDescriptors(patch::AbstractMatrix)
+    sift = SIFT()
+    descriptors = []
+    sift_features = sift(patch)
+
+    return descriptors
+end
+
+
+
 end # module DSIFTDescriptorForObjectDetection
 
 using FileIO
+
+img = load("data/query.jpg")
+
+patches = DSIFTDescriptorForObjectDetection.loadImgByPatches(
+    img,
+    (16, 16),
+    (8, 8)
+)
+
+DSIFTDescriptorForObjectDetection.computeSIFTDescriptors(patches[1])
