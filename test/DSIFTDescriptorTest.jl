@@ -46,6 +46,6 @@ println("test descriptors size: ", size(test_descriptors))
 
 dist = [DSIFTDescriptorForObjectDetection.computeAverageEuclidianDistance(query_descriptors[1], test_descriptors[i]) for i in 1:length(test_descriptors)]
 
-norm = [DSIFTDescriptorForObjectDetection.computeNorm(dist[i]) for i in 1:length(dist)]
+norm = [DSIFTDescriptorForObjectDetection.computeNegativeExponential(dist[i]) for i in 1:length(dist)]
 
 print(norm)

@@ -144,5 +144,22 @@ function computeAverageEuclidianDistance(descriptor1::AbstractArray, descriptor2
     return 1/length(descriptor1) .* sqrt(res)
 end
 
+"""
+    computeNegativeExponential(dist::Float64, alpha::Int=2)
+
+Compute the negative exponential of the given distance.
+
+# Arguments
+- `dist::Float64`: The distance value.
+- `alpha::Int`: The exponent value. Default is 2.
+
+# Returns
+The result of the negative exponential computation.
+
+"""
+function computeNegativeExponential(dist::Float64, alpha::Int=2)
+    return alpha^(-dist)
+end
+
 end # module DSIFTDescriptorForObjectDetection
 
