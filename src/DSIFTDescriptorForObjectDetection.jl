@@ -31,21 +31,21 @@ function loadImgByPatches(image::AbstractMatrix, patchSize::Tuple{Int, Int}=(16,
     return patches
 end
 
-function DSIFT(patch::AbstractMatrix)
+function DSIFT(patch::AbstractMatrix; sizePatch::Int=32)
     # Convert patch to grayscale
     patch = Gray.(patch)
     
     blurred_patch = imfilter(patch, Kernel.gaussian(3))
 
-    # Initialize an empty array to store the descriptors
+    # Initialise an empty array to store the descriptors
     descriptors = []
 
-    # Iterate over the patch in a 4x4 grid
-    for i in 1:4:size(blurred_patch, 1)
-        for j in 1:4:size(blurred_patch, 2)
-            # Extract a 4x4 subpatch
-            subpatch = blurred_patch[i:i+3, j:j+3]
-            
+    # Iterate over the patch in a sizePatchxsizePatch grid
+    for i in 1:sizePatch:size(blurred_patch, 1)
+        for j in 1:sizePatch:size(blurred_patch, 2)
+            # Extract a sizePatchxsizePatch subpatch
+            subpatch = blurred_patch[max(i, 1):min(i+(sizePatch-1), size(blurred_patch, 1)), max(j, 1):min(j+(sizePatch-1), size(blurred_patch, 2))]
+
             # Compute the gradients of the subpatch
             magnitude, orientation = computeGradients(subpatch)
 
@@ -75,18 +75,18 @@ Create a histogram of orientations for a given patch.
 - `histogram`: An array representing the histogram of orientations.
 """
 
-function createHistogram(magni::AbstractMatrix, orientation::AbstractMatrix, bins::Int=8)
+function createHistogram(magnitude::AbstractMatrix, orientation::AbstractMatrix, bins::Int=8)
     # Initialize an empty array to store the histogram
     histogram = zeros(bins)
     
     # Iterate over the pixels in the patch
-    for i in 1:size(magni, 1)
-        for j in 1:size(magni, 2)
+    for i in 1:size(magnitude, 1)
+        for j in 1:size(magnitude, 2)
             # Compute the bin index
-            bin = Int(floor((orientation[i, j] + π) / (2π) * bins) + 1)
-            
+            bin = mod(Int(floor((orientation[i, j] + π) / (2π) * bins)), bins) + 1
+
             # Increment the corresponding bin in the histogram
-            histogram[bin] += magni[i, j]
+            histogram[bin] += magnitude[i, j]
         end
     end
     
@@ -121,3 +121,4 @@ function computeGradients(patch::AbstractMatrix)
 end
 
 end # module DSIFTDescriptorForObjectDetection
+
