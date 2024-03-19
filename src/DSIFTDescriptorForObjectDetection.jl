@@ -2,7 +2,8 @@ module DSIFTDescriptorForObjectDetection
 
 using FileIO, 
     Images,
-    Colors
+    Colors,
+    LinearAlgebra
 
 """
     loadImgByPatches(image::AbstractMatrix, dim::Tuple{Int, Int}=(16, 16), stride::Tuple{Int, Int}=(8,8))
@@ -118,6 +119,29 @@ function computeGradients(patch::AbstractMatrix)
     orientation = atan.(gy, gx)
     
     return magnitude, orientation
+end
+
+"""
+    computeAverageEuclidianDistance(descriptor1::AbstractArray, descriptor2::AbstractArray)
+
+Compute the average Euclidean distance between two descriptors.
+
+# Arguments
+- `descriptor1::AbstractArray`: The first descriptor.
+- `descriptor2::AbstractArray`: The second descriptor.
+
+# Returns
+The average Euclidean distance between the two descriptors.
+"""
+function computeAverageEuclidianDistance(descriptor1::AbstractArray, descriptor2::AbstractArray)
+    # Compute the sum of the squared differences between the two descriptors
+    res = 0
+    for i in 1:length(descriptor1)
+        res += sum((descriptor1[i] .- descriptor2[i]).^2)
+    end
+    
+    # Return the square root of the sum
+    return 1/length(descriptor1) .* sqrt(res)
 end
 
 end # module DSIFTDescriptorForObjectDetection

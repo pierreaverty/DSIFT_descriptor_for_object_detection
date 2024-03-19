@@ -43,3 +43,9 @@ test_descriptors = [DSIFTDescriptorForObjectDetection.DSIFT(test[i]) for i in 1:
 # Print the size of the query and test descriptors
 println("query descriptors size: ", size(query_descriptors))
 println("test descriptors size: ", size(test_descriptors))
+
+dist = [DSIFTDescriptorForObjectDetection.computeAverageEuclidianDistance(query_descriptors[1], test_descriptors[i]) for i in 1:length(test_descriptors)]
+
+norm = [DSIFTDescriptorForObjectDetection.computeNorm(dist[i]) for i in 1:length(dist)]
+
+print(norm)
