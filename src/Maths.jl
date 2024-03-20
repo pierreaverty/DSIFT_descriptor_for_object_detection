@@ -10,8 +10,15 @@ Create a histogram of orientations for a given patch.
 
 # Returns
 - `histogram`: An array representing the histogram of orientations.
-"""
 
+# Example
+```julia
+magnitude = rand(8, 8)
+orientation = rand(8, 8)
+bins = 8
+histogram = createHistogram(magnitude, orientation, bins)
+```
+"""
 function createHistogram(magnitude::AbstractMatrix, orientation::AbstractMatrix, bins::Int=8)
     # Initialize an empty array to store the histogram
     histogram = zeros(bins)
@@ -42,6 +49,12 @@ Compute the gradients in the x and y directions of the given patch.
 # Returns
 - `magnitude`: The magnitude of the gradients.
 - `orientation`: The orientation of the gradients.
+
+# Example
+```julia
+patch = rand(8, 8)
+magnitude, orientation = computeGradients(patch)
+```
 """
 function computeGradients(patch::AbstractMatrix)
     # Define the x and y sobel kernels
@@ -68,6 +81,13 @@ Compute the average Euclidean distance between two descriptors.
 
 # Returns
 The average Euclidean distance between the two descriptors.
+
+# Example
+```julia
+descriptor1 = rand(8)
+descriptor2 = rand(8)
+distance = computeAverageEuclidianDistance(descriptor1, descriptor2)
+```
 """
 function computeAverageEuclidianDistance(descriptor1::AbstractArray, descriptor2::AbstractArray)
     # Compute the sum of the squared differences between the two descriptors
@@ -92,6 +112,12 @@ Compute the negative exponential of the given distance.
 # Returns
 The result of the negative exponential computation.
 
+# Example
+```julia
+dist = 0.5
+alpha = 2
+result = computeNegativeExponential(dist, alpha)
+```
 """
 function computeNegativeExponential(dist::Float64; alpha::Int=2)
     return alpha^(-dist)

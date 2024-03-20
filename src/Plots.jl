@@ -14,8 +14,16 @@ Draws bounding boxes on an image based on the given matches.
 # Returns
 The annotated image with bounding boxes.
 
+# Example
+```julia
+image = rand(100, 100)
+matches = [1, 2, 3, 4, 5]
+imageSize = (100, 100)
+patchSize = (8, 8)
+stepSize = (8, 8)
+annotated_image = drawBoundingBoxes(image, matches, imageSize, patchSize, stepSize)
+``` 
 """
-
 function drawBoundingBoxes(image, matches, imageSize, patchSize, stepSize)
     annotated_image = copy(image)
     
@@ -50,8 +58,15 @@ Converts a linear index to the corresponding coordinates in a grid.
 # Returns
 A tuple `(x, y)` representing the coordinates of the top-left corner of the patch.
 
+# Example
+```julia
+index = 5
+imageSize = (100, 100)
+patchSize = (8, 8)
+stepSize = (8, 8)
+(x, y) = indexToCoordinates(index, imageSize, patchSize, stepSize)
+```
 """
-
 function indexToCoordinates(index, imageSize, patchSize, stepSize)
     rows = 1:stepSize[1]:(imageSize[1]-patchSize[1]+1)
     cols = 1:stepSize[2]:(imageSize[2]-patchSize[2]+1)

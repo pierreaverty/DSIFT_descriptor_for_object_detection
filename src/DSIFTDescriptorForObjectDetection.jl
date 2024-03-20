@@ -3,6 +3,39 @@ Module for computing Dense Scale-Invariant Feature Transform (DSIFT) descriptors
 
 This module provides functions for computing DSIFT descriptors, which are widely used in computer vision tasks such as object detection. DSIFT descriptors are robust to changes in scale and rotation, making them suitable for detecting objects in images with varying viewpoints.
 
+# Example
+```julia
+using DSIFTDescriptorForObjectDetection
+
+# Load the query and test images
+query_img = load("image1")
+test_img = load("image2")
+threshold = 0.6 # Example threshold, adjust based on your application
+
+# Load image patches for the query & test image
+query = DSIFTDescriptorForObjectDetection.loadImgByPatches(
+    query_img,
+    size(query_img),
+    (8, 8)
+)
+test = DSIFTDescriptorForObjectDetection.loadImgByPatches(
+    test_img,
+    size(query_img),
+    (8, 8)
+)
+
+# Compute descriptors for the query & test patches
+query_descriptors = [DSIFTDescriptorForObjectDetection.DSIFT(query[1])]
+test_descriptors = [DSIFTDescriptorForObjectDetection.DSIFT(test[i]) for i in 1:length(test)]
+
+# Compute the average Euclidean distance between the query and test descriptors and find matches that exceed the threshold
+dist = [DSIFTDescriptorForObjectDetection.computeAverageEuclidianDistance(query_descriptors[1], test_descriptors[i]) for i in 1:length(test_descriptors)]
+results = [DSIFTDescriptorForObjectDetection.computeNegativeExponential(dist[i], alpha=2) for i in 1:length(dist)]
+matches = DSIFTDescriptorForObjectDetection.findMatches(threshold, results)
+
+# Generate the annoted image with bounding boxes
+annotated_image = DSIFTDescriptorForObjectDetection.drawBoundingBoxes(test_img, matches, size(test_img), size(query_img), (8, 8))   
+```
 """
 module DSIFTDescriptorForObjectDetection
 
@@ -29,8 +62,12 @@ Load an image by dividing it into patches of specified dimensions and stride.
 # Returns
 An array of patches extracted from the image.
 
+# Example
+```julia
+image = rand(100, 100)
+patches = loadImgByPatches(image, (16, 16), (8, 8))
+```
 """
-
 function loadImgByPatches(image::AbstractMatrix, patchSize::Tuple{Int, Int}=(16, 16), stepSize::Tuple{Int, Int}=(8,8))
     patches = []
 
@@ -55,8 +92,12 @@ Compute the Dense Scale-Invariant Feature Transform (DSIFT) descriptors for a gi
 # Returns
 An array of descriptors computed for the input patch.
 
+# Example
+```julia
+patch = rand(32, 32)
+descriptors = DSIFT(patch)
+```
 """
-
 function DSIFT(patch::AbstractMatrix; sizePatch::Int=32)
     # Convert patch to grayscale
     patch = Gray.(patch)
